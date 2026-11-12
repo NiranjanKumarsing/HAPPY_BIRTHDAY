@@ -70,13 +70,13 @@ export const Scene10Apology: React.FC<SceneProps> = ({ onRestart }) => {
             initial={{ opacity: 0, y: 25, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full z-10 mt-4 space-y-6"
+            className="w-full z-10 mt-6 pt-4 space-y-6"
           >
             {/* The Main Letter Paper */}
-            <div className="bg-[#FFFDF8] rounded-3xl p-6 sm:p-9 shadow-2xl border border-[#F8C8DC] vintage-letter-paper text-[#59404D]">
+            <div className="relative bg-[#FFFDF8] rounded-3xl p-6 sm:p-9 shadow-2xl border border-[#F8C8DC] vintage-letter-paper text-[#59404D]">
               {/* Wax Seal Decoration at top of paper */}
-              <div className="flex justify-center -mt-10 mb-4">
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#E24C68] via-[#C23B55] to-[#8C1B33] flex items-center justify-center shadow-lg border-2 border-white/60">
+              <div className="flex justify-center -mt-12 mb-5 relative z-20">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#E24C68] via-[#C23B55] to-[#8C1B33] flex items-center justify-center shadow-lg border-2 border-white/80">
                   <Heart className="w-7 h-7 text-white fill-white" />
                 </div>
               </div>

@@ -30,7 +30,7 @@ export const ScrapbookGallery: React.FC = () => {
       </div>
 
       {/* Polaroid Grid / Masonry Layout */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 px-2 sm:px-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 px-3 sm:px-4 overflow-hidden py-4">
         {PHOTO_MEMORIES.map((photo, index) => (
           <motion.div
             key={photo.id}
@@ -40,9 +40,9 @@ export const ScrapbookGallery: React.FC = () => {
             whileHover={{ scale: 1.03, rotate: 0 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => handleOpenPhoto(photo)}
-            className="group relative cursor-pointer"
+            className="group relative cursor-pointer mx-auto w-full max-w-[320px] sm:max-w-none"
             style={{
-              transform: `rotate(${photo.rotation || 0}deg)`,
+              transform: `rotate(${photo.rotation ? photo.rotation * 0.7 : 0}deg)`,
               transformOrigin: 'center center',
             }}
           >
