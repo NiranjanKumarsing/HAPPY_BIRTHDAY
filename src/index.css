@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --safe-bottom: env(safe-area-inset-bottom, 16px);
+  --safe-top: env(safe-area-inset-top, 16px);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  background-color: #FFF7F0;
+  color: #59404D;
+}
+
+/* Paper texture effect */
+.paper-texture {
+  background-color: #FFFDF9;
+  background-image: 
+    radial-gradient(rgba(244, 175, 196, 0.12) 1px, transparent 0),
+    radial-gradient(rgba(220, 203, 250, 0.1) 1px, transparent 0);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+}
+
+.vintage-letter-paper {
+  background-color: #FFFDF8;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 27px,
+    rgba(239, 165, 185, 0.25) 28px
+  );
+  box-shadow: 
+    0 4px 20px rgba(198, 91, 130, 0.15),
+    0 1px 3px rgba(89, 64, 77, 0.08);
+}
+
+.scrapbook-tape {
+  background: rgba(255, 240, 179, 0.7);
+  backdrop-filter: blur(2px);
+  box-shadow: 0 1px 3px rgba(89, 64, 77, 0.1);
+}
+
+/* Glassmorphism romantic card */
+.glass-romantic {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 8px 32px 0 rgba(198, 91, 130, 0.15);
+}
+
+.glass-romantic-pink {
+  background: rgba(248, 200, 220, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 12px 36px 0 rgba(198, 91, 130, 0.2);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(248, 200, 220, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(198, 91, 130, 0.4);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(198, 91, 130, 0.7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
