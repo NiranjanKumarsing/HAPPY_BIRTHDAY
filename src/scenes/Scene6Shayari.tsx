@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sparkles, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Moon, ChevronRight, ChevronLeft } from 'lucide-react';
 import { SHAYARIS } from '../data/shayaris';
 import { soundEffects } from '../utils/soundEffects';
 
@@ -11,6 +11,7 @@ interface SceneProps {
 export const Scene6Shayari: React.FC<SceneProps> = ({ onNext }) => {
   const [activeIdx, setActiveIdx] = useState(0);
   const currentShayari = SHAYARIS[activeIdx];
+  const isLastShayari = activeIdx === SHAYARIS.length - 1;
 
   const handleNext = () => {
     soundEffects.playPop();
@@ -119,7 +120,7 @@ export const Scene6Shayari: React.FC<SceneProps> = ({ onNext }) => {
           {activeIdx + 1} of {SHAYARIS.length}
         </span>
 
-        {activeIdx < SHAYARIS.length - 1 ? (
+        {!isLastShayari && (
           <button
             onClick={handleNext}
             className="px-4 py-2 rounded-full bg-[#FFF7F0] border border-[#F8C8DC] text-[#8B264A] text-xs sm:text-sm font-semibold flex items-center gap-1.5 hover:bg-white shadow-sm cursor-pointer"
@@ -127,35 +128,33 @@ export const Scene6Shayari: React.FC<SceneProps> = ({ onNext }) => {
             <span>Agli Shayari</span>
             <ChevronRight className="w-4 h-4" />
           </button>
-        ) : (
-          <button
+        )}
+      </div>
+
+      {/* PROCEED BUTTON: SHOWN ONLY WHEN SHE REACHES THE LAST SHAYARI! */}
+      {isLastShayari && (
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-8 w-full flex flex-col items-center"
+        >
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
             onClick={() => {
               soundEffects.playPop();
               onNext();
             }}
-            className="px-4 py-2 rounded-full bg-gradient-to-r from-[#EFA5B9] to-[#C65B82] text-white text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-romantic cursor-pointer"
+            className="px-7 py-3.5 rounded-full bg-gradient-to-r from-[#F4AFC4] via-[#EFA5B9] to-[#C65B82] text-white font-bold text-sm sm:text-base shadow-romantic flex items-center gap-2 cursor-pointer"
           >
-            <span>Little Things 🧸</span>
+            <span>A few little things that make you so special... 🧸🌸</span>
             <ChevronRight className="w-4 h-4" />
-          </button>
-        )}
-      </div>
-
-      {/* Main Next Button */}
-      <div className="mt-8">
-        <motion.button
-          whileHover={{ scale: 1.04 }}
-          whileTap={{ scale: 0.96 }}
-          onClick={() => {
-            soundEffects.playPop();
-            onNext();
-          }}
-          className="px-7 py-3 rounded-full bg-white/90 border border-[#F8C8DC] text-[#8B264A] font-semibold text-xs sm:text-sm shadow-sm hover:shadow-romantic transition-all flex items-center gap-2 cursor-pointer"
-        >
-          <span>Continue to Scene 7: Little Things I Love About You</span>
-          <Sparkles className="w-4 h-4 text-[#C65B82]" />
-        </motion.button>
-      </div>
+          </motion.button>
+          <span className="text-[11px] text-[#8C6C7E] mt-1.5 italic">
+            Tap to continue
+          </span>
+        </motion.div>
+      )}
     </div>
   );
 };

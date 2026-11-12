@@ -1,10 +1,52 @@
 // Web Audio API Sound Synthesizer - 100% offline, lightweight, reliable across iOS & Android!
 
+interface NoteEvent {
+  freq: number;
+  duration: number; // in milliseconds
+  gap: number;      // pause after note in milliseconds
+}
+
 class SoundEngine {
   private ctx: AudioContext | null = null;
   private isMuted: boolean = true; // default silent as per requirements
-  private musicInterval: number | null = null;
-  private musicNotesIndex: number = 0;
+  private melodyTimeout: number | null = null;
+  private currentNoteIndex: number = 0;
+
+  // Exact Happy Birthday instrumental melody notes (in Hz)
+  private happyBirthdayNotes: NoteEvent[] = [
+    // Line 1: Hap-py birth-day to you
+    { freq: 293.66, duration: 280, gap: 40 },  // D4
+    { freq: 293.66, duration: 160, gap: 40 },  // D4
+    { freq: 329.63, duration: 450, gap: 50 },  // E4
+    { freq: 293.66, duration: 450, gap: 50 },  // D4
+    { freq: 392.00, duration: 450, gap: 50 },  // G4
+    { freq: 369.99, duration: 900, gap: 200 }, // F#4
+
+    // Line 2: Hap-py birth-day to you
+    { freq: 293.66, duration: 280, gap: 40 },  // D4
+    { freq: 293.66, duration: 160, gap: 40 },  // D4
+    { freq: 329.63, duration: 450, gap: 50 },  // E4
+    { freq: 293.66, duration: 450, gap: 50 },  // D4
+    { freq: 440.00, duration: 450, gap: 50 },  // A4
+    { freq: 392.00, duration: 900, gap: 200 }, // G4
+
+    // Line 3: Hap-py birth-day dear Chhavi
+    { freq: 293.66, duration: 280, gap: 40 },  // D4
+    { freq: 293.66, duration: 160, gap: 40 },  // D4
+    { freq: 587.33, duration: 480, gap: 50 },  // D5
+    { freq: 493.88, duration: 480, gap: 50 },  // B4
+    { freq: 392.00, duration: 450, gap: 50 },  // G4
+    { freq: 369.99, duration: 450, gap: 50 },  // F#4
+    { freq: 329.63, duration: 850, gap: 200 }, // E4
+
+    // Line 4: Hap-py birth-day to you
+    { freq: 523.25, duration: 280, gap: 40 },  // C5
+    { freq: 523.25, duration: 160, gap: 40 },  // C5
+    { freq: 493.88, duration: 480, gap: 50 },  // B4
+    { freq: 392.00, duration: 480, gap: 50 },  // G4
+    { freq: 440.00, duration: 520, gap: 50 },  // A4
+    { freq: 392.00, duration: 1200, gap: 800 }, // G4 (sustained celebration)
+  ];
 
   private getContext(): AudioContext | null {
     if (typeof window === 'undefined') return null;
@@ -27,9 +69,10 @@ class SoundEngine {
   public setMuted(muted: boolean) {
     this.isMuted = muted;
     if (muted) {
-      this.stopRomanticMelody();
+      this.stopHappyBirthdayMelody();
     } else {
-      this.startRomanticMelody();
+      this.currentNoteIndex = 0;
+      this.playNextHappyBirthdayNote();
     }
   }
 
@@ -99,7 +142,6 @@ class SoundEngine {
     if (!ctx) return;
 
     try {
-      // Gentle warm harp sweep
       const freqs = [392.0, 493.88, 587.33, 659.25, 783.99]; // G4, B4, D5, E5, G5
       freqs.forEach((f, idx) => {
         const osc = ctx.createOscillator();
@@ -129,7 +171,6 @@ class SoundEngine {
     if (!ctx) return;
 
     try {
-      // Soft airy whoosh + gentle chime
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       const now = ctx.currentTime;
@@ -147,7 +188,6 @@ class SoundEngine {
       osc.start(now);
       osc.stop(now + 0.26);
 
-      // Followed by little bell
       setTimeout(() => {
         this.playChime();
       }, 150);
@@ -185,58 +225,64 @@ class SoundEngine {
     }
   }
 
-  // Gentle music box background melody
-  private startRomanticMelody() {
-    if (this.musicInterval) return;
+  // Plays Happy Birthday Instrumental Note by Note
+  private playNextHappyBirthdayNote() {
+    if (this.isMuted) return;
     const ctx = this.getContext();
     if (!ctx) return;
 
-    // Soft pentatonic romantic lullaby / music-box notes (Hz)
-    // E5, G5, A5, B5, D6, E6, D6, B5, A5, G5, E5, D5
-    const melody = [
-      659.25, 783.99, 880.0, 987.77, 1174.66, 1318.51, 
-      1174.66, 987.77, 880.0, 783.99, 659.25, 587.33,
-      659.25, 880.0, 783.99, 587.33, 523.25, 587.33
-    ];
+    const note = this.happyBirthdayNotes[this.currentNoteIndex];
+    const now = ctx.currentTime;
+    const durationSeconds = note.duration / 1000;
 
-    this.musicInterval = window.setInterval(() => {
-      if (this.isMuted) return;
-      const actx = this.getContext();
-      if (!actx) return;
+    try {
+      // Main music-box bell tone
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(note.freq, now);
 
-      const freq = melody[this.musicNotesIndex % melody.length];
-      this.musicNotesIndex++;
+      // Soft harmonic overtone for crystalline music-box feel
+      const oscHarmonic = ctx.createOscillator();
+      const gainHarmonic = ctx.createGain();
+      oscHarmonic.type = 'sine';
+      oscHarmonic.frequency.setValueAtTime(note.freq * 2, now);
 
-      try {
-        const osc = actx.createOscillator();
-        const gain = actx.createGain();
-        const now = actx.currentTime;
+      // Volume envelope
+      gain.gain.setValueAtTime(0.045, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + durationSeconds);
 
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, now);
+      gainHarmonic.gain.setValueAtTime(0.015, now);
+      gainHarmonic.gain.exponentialRampToValueAtTime(0.0001, now + durationSeconds * 0.8);
 
-        // Very soft, gentle music box envelope
-        gain.gain.setValueAtTime(0.028, now);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
 
-        osc.connect(gain);
-        gain.connect(actx.destination);
+      oscHarmonic.connect(gainHarmonic);
+      gainHarmonic.connect(ctx.destination);
 
-        osc.start(now);
-        osc.stop(now + 0.75);
-      } catch {
-        // ignore
-      }
-    }, 420);
+      osc.start(now);
+      osc.stop(now + durationSeconds);
+
+      oscHarmonic.start(now);
+      oscHarmonic.stop(now + durationSeconds);
+    } catch {
+      // ignore
+    }
+
+    // Schedule next note
+    this.currentNoteIndex = (this.currentNoteIndex + 1) % this.happyBirthdayNotes.length;
+    this.melodyTimeout = window.setTimeout(() => {
+      this.playNextHappyBirthdayNote();
+    }, note.duration + note.gap);
   }
 
-  private stopRomanticMelody() {
-    if (this.musicInterval) {
-      clearInterval(this.musicInterval);
-      this.musicInterval = null;
+  private stopHappyBirthdayMelody() {
+    if (this.melodyTimeout) {
+      clearTimeout(this.melodyTimeout);
+      this.melodyTimeout = null;
     }
   }
 }
 
 export const soundEffects = new SoundEngine();
-

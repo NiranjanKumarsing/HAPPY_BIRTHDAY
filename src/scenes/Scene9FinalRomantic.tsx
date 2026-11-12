@@ -57,7 +57,7 @@ export const Scene9FinalRomantic: React.FC<SceneProps> = ({ onNext }) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.7 }}
-        className="w-full bg-[#FFFDF9]/90 backdrop-blur-md rounded-3xl p-7 sm:p-9 shadow-2xl border border-[#F8C8DC] space-y-5"
+        className="w-full bg-[#FFFDF9]/95 backdrop-blur-md rounded-3xl p-7 sm:p-9 shadow-2xl border border-[#F8C8DC] space-y-5"
       >
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#DCCBFA]/60 text-[#59404D] border border-[#DCCBFA]">
           <Sparkles className="w-3.5 h-3.5 text-[#C65B82]" />
@@ -92,17 +92,17 @@ export const Scene9FinalRomantic: React.FC<SceneProps> = ({ onNext }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.6 }}
-        className="my-6"
+        className="my-5"
       >
         <CuteTeddy mood="heart" size={85} />
       </motion.div>
 
-      {/* Gentle transition to the final apology scene */}
+      {/* Gentle transition with a respectful romantic hint */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7, duration: 0.6 }}
-        className="w-full flex flex-col items-center gap-2"
+        className="w-full flex flex-col items-center gap-1.5"
       >
         <button
           onClick={() => {
@@ -111,11 +111,11 @@ export const Scene9FinalRomantic: React.FC<SceneProps> = ({ onNext }) => {
           }}
           className="px-8 py-4 rounded-full bg-gradient-to-r from-[#F4AFC4] via-[#EFA5B9] to-[#C65B82] text-white font-bold text-sm sm:text-base shadow-romantic flex items-center gap-2.5 hover:scale-105 active:scale-95 transition-all cursor-pointer"
         >
-          <span>Ek Aakhri Baat, Dil Se... 🥺❤️</span>
+          <span>Ek aakhri baat, dil se... 🥺🌸</span>
           <ChevronRight className="w-4 h-4" />
         </button>
-        <span className="text-xs text-[#8C6C7E]">
-          A special personal message just between us
+        <span className="text-[11px] text-[#8C6C7E] italic">
+          Tap to open the final page
         </span>
       </motion.div>
     </div>

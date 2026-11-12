@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Heart } from 'lucide-react';
+import { Sparkles, Heart, ChevronRight } from 'lucide-react';
 import { triggerGiftBurst } from '../../utils/confetti';
 import { soundEffects } from '../../utils/soundEffects';
 
@@ -24,9 +24,9 @@ export const GiftBox: React.FC<GiftBoxProps> = ({ onContinue }) => {
   };
 
   return (
-    <div className="relative w-full max-w-md mx-auto flex flex-col items-center select-none px-3">
+    <div className="relative w-full max-w-md mx-auto flex flex-col items-center select-none px-3 py-2">
       {/* Visual Instruction Header */}
-      <div className="text-center mb-6">
+      <div className="text-center mb-5">
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF0B3] text-[#8B264A] shadow-sm mb-2 border border-[#FFF0B3]">
           <Sparkles className="w-3.5 h-3.5 text-[#E24C68]" />
           A Little Gift For You
@@ -46,7 +46,7 @@ export const GiftBox: React.FC<GiftBoxProps> = ({ onContinue }) => {
       </div>
 
       {/* Gift Box Container */}
-      <div className="relative w-64 h-64 sm:w-72 sm:h-72 flex items-center justify-center">
+      <div className="relative w-64 h-64 sm:w-72 sm:h-72 flex items-center justify-center my-2">
         {/* Magical glow behind */}
         <motion.div
           animate={
@@ -169,18 +169,23 @@ export const GiftBox: React.FC<GiftBoxProps> = ({ onContinue }) => {
               </p>
 
               {onContinue && (
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => {
-                    soundEffects.playPop();
-                    onContinue();
-                  }}
-                  className="mt-5 px-6 py-3 rounded-full bg-gradient-to-r from-[#EFA5B9] to-[#C65B82] text-white font-semibold text-sm sm:text-base shadow-romantic flex items-center gap-2 mx-auto cursor-pointer"
-                >
-                  <span>A Little More For You</span>
-                  <Heart className="w-4 h-4 fill-white text-white" />
-                </motion.button>
+                <div className="mt-6 flex flex-col items-center">
+                  <motion.button
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => {
+                      soundEffects.playPop();
+                      onContinue();
+                    }}
+                    className="px-7 py-3.5 rounded-full bg-gradient-to-r from-[#F4AFC4] via-[#EFA5B9] to-[#C65B82] text-white font-bold text-sm sm:text-base shadow-romantic flex items-center gap-2 cursor-pointer"
+                  >
+                    <span>A quiet thought under the stars... ✨🌙</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </motion.button>
+                  <span className="text-[11px] text-[#8C6C7E] mt-1.5 italic">
+                    Tap to turn the page
+                  </span>
+                </div>
               )}
             </div>
           </motion.div>
@@ -189,4 +194,3 @@ export const GiftBox: React.FC<GiftBoxProps> = ({ onContinue }) => {
     </div>
   );
 };
-

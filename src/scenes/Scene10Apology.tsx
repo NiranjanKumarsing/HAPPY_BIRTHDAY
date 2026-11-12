@@ -12,6 +12,7 @@ interface SceneProps {
 
 export const Scene10Apology: React.FC<SceneProps> = ({ onRestart }) => {
   const [isLetterOpened, setIsLetterOpened] = useState(false);
+  const [stayInMoment, setStayInMoment] = useState(false);
 
   const handleOpenLetter = () => {
     soundEffects.playEnvelopeOpen();
@@ -74,7 +75,7 @@ export const Scene10Apology: React.FC<SceneProps> = ({ onRestart }) => {
             {/* The Main Letter Paper */}
             <div className="bg-[#FFFDF8] rounded-3xl p-6 sm:p-9 shadow-2xl border border-[#F8C8DC] vintage-letter-paper text-[#59404D]">
               {/* Wax Seal Decoration at top of paper */}
-              <div className="flex justify-center -mt-12 mb-4">
+              <div className="flex justify-center -mt-10 mb-4">
                 <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#E24C68] via-[#C23B55] to-[#8C1B33] flex items-center justify-center shadow-lg border-2 border-white/60">
                   <Heart className="w-7 h-7 text-white fill-white" />
                 </div>
@@ -108,7 +109,7 @@ export const Scene10Apology: React.FC<SceneProps> = ({ onRestart }) => {
                   Kabhi kabhi aapko samajhne ke bajaye main chahta hoon ki aap mujhe samjhein. Aur shayad isi chakkar mein main bhool jaata hoon ki aapki bhi apni feelings hain, aapka bhi apna mood hai, aur aapko bhi kabhi bas pyaar, patience aur thoda sa sukoon chahiye hota hai.
                 </p>
 
-                <p className="bg-[#F8C8DC]/30 p-3 rounded-2xl border border-[#F8C8DC]/60 font-serif italic text-lg sm:text-xl text-[#8B264A]">
+                <p className="bg-[#F8C8DC]/30 p-3.5 rounded-2xl border border-[#F8C8DC]/60 font-serif italic text-lg sm:text-xl text-[#8B264A] leading-relaxed">
                   Jann, mujhe maaf kar dijiyega un saare lamhon ke liye jab meri wajah se aap pareshan hui hain, jab main aapki baat theek se nahi samajh paaya, ya jab aapko woh pyaar aur understanding nahi de paaya jiski aap haqdar hain.
                 </p>
 
@@ -136,7 +137,7 @@ export const Scene10Apology: React.FC<SceneProps> = ({ onRestart }) => {
                   Aur haan, meri Jann, aapko tang karna shayad meri aadat hai, lekin aapko hurt karna kabhi mera iraada nahi hona chahiye.
                 </p>
 
-                <p className="font-serif italic text-lg sm:text-xl text-[#7A4B62] bg-[#FFF0B3]/40 p-3 rounded-2xl border border-[#FFE28A]">
+                <p className="font-serif italic text-lg sm:text-xl text-[#7A4B62] bg-[#FFF0B3]/40 p-3.5 rounded-2xl border border-[#FFE28A] leading-relaxed">
                   I want to become someone who adds peace to your life, not someone who makes your difficult days even more difficult.
                 </p>
 
@@ -194,7 +195,7 @@ export const Scene10Apology: React.FC<SceneProps> = ({ onRestart }) => {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 + idx * 0.15, duration: 0.5 }}
-                  className="bg-white/90 backdrop-blur-sm p-4 sm:p-5 rounded-2xl shadow-paper border border-[#F8C8DC] flex items-start gap-3.5"
+                  className="bg-white/95 backdrop-blur-sm p-4 sm:p-5 rounded-2xl shadow-paper border border-[#F8C8DC] flex items-start gap-3.5"
                 >
                   <span className="text-2xl select-none">{item.icon}</span>
                   <div className="flex-1">
@@ -245,21 +246,49 @@ export const Scene10Apology: React.FC<SceneProps> = ({ onRestart }) => {
               </div>
             </motion.div>
 
-            {/* Restart Journey Button */}
-            <div className="pt-6 pb-12 flex flex-col items-center gap-2">
-              <button
-                onClick={() => {
-                  soundEffects.playPop();
-                  onRestart();
-                }}
-                className="px-6 py-3 rounded-full bg-white/80 border border-[#F8C8DC] text-[#8B264A] font-semibold text-xs sm:text-sm shadow-sm hover:bg-white flex items-center gap-2 cursor-pointer transition-all"
-              >
-                <RotateCcw className="w-4 h-4 text-[#C65B82]" />
-                <span>Relive Chhavi's Little World From Start</span>
-              </button>
-              <span className="text-[11px] text-[#8C6C7E]">
-                Made with endless love by Niranjan for his Jann ❤️
-              </span>
+            {/* INTERACTIVE CHOICE: ASK HER IF SHE WANTS TO RELIVE THE EXPERIENCE */}
+            <div className="pt-6 pb-12 flex flex-col items-center">
+              <div className="w-full max-w-md bg-white/90 backdrop-blur-sm p-6 rounded-3xl border border-[#F8C8DC] shadow-romantic text-center space-y-3">
+                <div className="w-10 h-10 rounded-full bg-[#FFF0B3] border border-[#F3BE58] flex items-center justify-center text-lg mx-auto shadow-sm">
+                  ✨
+                </div>
+                <h4 className="font-serif font-bold text-base sm:text-lg text-[#8B264A]">
+                  Jann, kya aap yeh poori khoobsurat journey ek baar phir se jeena chahengi? 🌸
+                </h4>
+
+                {!stayInMoment ? (
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                    <button
+                      onClick={() => {
+                        soundEffects.playPop();
+                        onRestart();
+                      }}
+                      className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-gradient-to-r from-[#F4AFC4] via-[#EFA5B9] to-[#C65B82] text-white font-bold text-xs sm:text-sm shadow-romantic flex items-center justify-center gap-2 cursor-pointer hover:scale-105 active:scale-95 transition-all"
+                    >
+                      <RotateCcw className="w-4 h-4 text-white" />
+                      <span>Haan ji, bilkul! Relive again ❤️</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        soundEffects.playPop();
+                        setStayInMoment(true);
+                      }}
+                      className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-[#FFF7F0] border border-[#F8C8DC] text-[#8C6C7E] hover:bg-white font-semibold text-xs sm:text-sm cursor-pointer transition-all"
+                    >
+                      <span>Bas yeh lamha mehsoos karna hai ✨</span>
+                    </button>
+                  </div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="p-3 bg-[#D4F0E2]/60 border border-[#D4F0E2] rounded-2xl text-xs sm:text-sm text-[#285A43] font-medium"
+                  >
+                    <span>Aap hamesha mere dil ke sabse kareeb hain, Jann. Happy Birthday! 🤗💕</span>
+                  </motion.div>
+                )}
+              </div>
             </div>
           </motion.div>
         </AnimatePresence>
@@ -267,4 +296,3 @@ export const Scene10Apology: React.FC<SceneProps> = ({ onRestart }) => {
     </div>
   );
 };
-

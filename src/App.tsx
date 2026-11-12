@@ -31,10 +31,6 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleSelectScene = (sceneNum: number) => {
-    setCurrentScene(sceneNum);
-  };
-
   const handleReset = () => {
     setCurrentScene(1);
   };
@@ -45,16 +41,11 @@ export const App: React.FC = () => {
       <FloatingHearts count={currentScene === 10 ? 10 : 18} />
       <TwinklingStars count={currentScene >= 6 && currentScene <= 9 ? 30 : 16} />
 
-      {/* Top Floating Navigation Bar */}
-      <NavBar
-        currentScene={currentScene}
-        totalScenes={totalScenes}
-        onSelectScene={handleSelectScene}
-        onReset={handleReset}
-      />
+      {/* Minimal Top Floating Header (Music Toggle only) */}
+      <NavBar />
 
       {/* Main Content Area - padded to avoid overlap with floating navbar */}
-      <main className="relative z-10 w-full flex-1 pt-18 sm:pt-20 pb-12 flex flex-col justify-center">
+      <main className="relative z-10 w-full flex-1 pt-16 sm:pt-20 pb-10 flex flex-col justify-center">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentScene}
@@ -77,14 +68,8 @@ export const App: React.FC = () => {
           </motion.div>
         </AnimatePresence>
       </main>
-
-      {/* Subtle Footer Watermark */}
-      <footer className="relative z-10 py-3 text-center text-[11px] text-[#8C6C7E] font-medium pointer-events-none select-none">
-        <span>A Little World Made With Love by Niranjan For Chhavi ❤️</span>
-      </footer>
     </div>
   );
 };
 
 export default App;
-

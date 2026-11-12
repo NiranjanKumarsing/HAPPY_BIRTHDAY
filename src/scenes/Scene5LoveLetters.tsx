@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Heart, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Heart, ChevronRight, ChevronLeft } from 'lucide-react';
 import { LOVE_LETTERS } from '../data/letters';
 import { soundEffects } from '../utils/soundEffects';
 
@@ -11,6 +11,7 @@ interface SceneProps {
 export const Scene5LoveLetters: React.FC<SceneProps> = ({ onNext }) => {
   const [activeIdx, setActiveIdx] = useState(0);
   const currentLetter = LOVE_LETTERS[activeIdx];
+  const isLastLetter = activeIdx === LOVE_LETTERS.length - 1;
 
   const handleNextLetter = () => {
     soundEffects.playPop();
@@ -137,7 +138,7 @@ export const Scene5LoveLetters: React.FC<SceneProps> = ({ onNext }) => {
           {activeIdx + 1} of {LOVE_LETTERS.length}
         </span>
 
-        {activeIdx < LOVE_LETTERS.length - 1 ? (
+        {!isLastLetter && (
           <button
             onClick={handleNextLetter}
             className="px-4 py-2 rounded-full bg-[#FFF7F0] border border-[#F8C8DC] text-[#8B264A] text-xs sm:text-sm font-semibold flex items-center gap-1.5 hover:bg-white shadow-sm cursor-pointer"
@@ -145,35 +146,33 @@ export const Scene5LoveLetters: React.FC<SceneProps> = ({ onNext }) => {
             <span>Next Letter</span>
             <ChevronRight className="w-4 h-4" />
           </button>
-        ) : (
-          <button
+        )}
+      </div>
+
+      {/* PROCEED BUTTON: SHOWN ONLY WHEN SHE IS AT THE LAST LETTER! */}
+      {isLastLetter && (
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-8 w-full flex flex-col items-center"
+        >
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
             onClick={() => {
               soundEffects.playPop();
               onNext();
             }}
-            className="px-4 py-2 rounded-full bg-gradient-to-r from-[#EFA5B9] to-[#C65B82] text-white text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-romantic cursor-pointer"
+            className="px-7 py-3.5 rounded-full bg-gradient-to-r from-[#F4AFC4] via-[#EFA5B9] to-[#C65B82] text-white font-bold text-sm sm:text-base shadow-romantic flex items-center gap-2 cursor-pointer"
           >
-            <span>Read Shayaris 🌙</span>
+            <span>Something special under the starlit night... 🌙✨</span>
             <ChevronRight className="w-4 h-4" />
-          </button>
-        )}
-      </div>
-
-      {/* Main Next Button */}
-      <div className="mt-8">
-        <motion.button
-          whileHover={{ scale: 1.04 }}
-          whileTap={{ scale: 0.96 }}
-          onClick={() => {
-            soundEffects.playPop();
-            onNext();
-          }}
-          className="px-7 py-3 rounded-full bg-white/90 border border-[#F8C8DC] text-[#8B264A] font-semibold text-xs sm:text-sm shadow-sm hover:shadow-romantic transition-all flex items-center gap-2 cursor-pointer"
-        >
-          <span>Continue to Scene 6: Shayari, Sirf Aapke Naam</span>
-          <Sparkles className="w-4 h-4 text-[#C65B82]" />
-        </motion.button>
-      </div>
+          </motion.button>
+          <span className="text-[11px] text-[#8C6C7E] mt-1.5 italic">
+            Tap to continue
+          </span>
+        </motion.div>
+      )}
     </div>
   );
 };

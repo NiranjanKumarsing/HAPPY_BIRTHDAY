@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, ChevronRight } from 'lucide-react';
+import { Sparkles, ChevronRight, Heart } from 'lucide-react';
 import { BIRTHDAY_WISHES } from '../data/wishes';
 import { BirthdayCake } from '../components/BirthdayCake/BirthdayCake';
 import { CuteTeddy } from '../components/Decorations/CuteTeddy';
@@ -12,6 +12,7 @@ interface SceneProps {
 
 export const Scene3BirthdayCascade: React.FC<SceneProps> = ({ onNext }) => {
   const [revealedCards, setRevealedCards] = useState<Record<string, boolean>>({});
+  const [candlesBlown, setCandlesBlown] = useState<boolean>(false);
 
   const toggleCard = (id: string) => {
     soundEffects.playPop();
@@ -21,15 +22,20 @@ export const Scene3BirthdayCascade: React.FC<SceneProps> = ({ onNext }) => {
     }));
   };
 
+  // Check if at least 3 cards have been viewed or the last card has been interacted with
+  const hasInteractedWithLast = !!revealedCards['wish-5'];
+  const totalRevealed = Object.keys(revealedCards).length;
+  const canProceed = candlesBlown || totalRevealed >= 3 || hasInteractedWithLast;
+
   return (
     <div className="relative min-h-[82vh] max-w-xl mx-auto py-6 px-4 flex flex-col items-center">
       {/* Floating balloons in background */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
         {[
-          { color: '#F8C8DC', left: '8%', delay: 0 },
-          { color: '#FFF0B3', left: '85%', delay: 1.5 },
-          { color: '#DCCBFA', left: '20%', delay: 3 },
-          { color: '#EFA5B9', left: '75%', delay: 2 },
+          { left: '8%', delay: 0 },
+          { left: '85%', delay: 1.5 },
+          { left: '20%', delay: 3 },
+          { left: '75%', delay: 2 },
         ].map((balloon, i) => (
           <motion.div
             key={i}
@@ -77,11 +83,11 @@ export const Scene3BirthdayCascade: React.FC<SceneProps> = ({ onNext }) => {
 
       {/* Interactive Birthday Cake */}
       <div className="w-full mb-6">
-        <BirthdayCake />
+        <BirthdayCake onBlownOut={() => setCandlesBlown(true)} />
       </div>
 
       {/* Cute dancing teddy bear cheering */}
-      <div className="flex items-center gap-3 bg-white/70 backdrop-blur-sm px-4 py-2.5 rounded-2xl border border-[#F8C8DC] shadow-sm mb-6">
+      <div className="flex items-center gap-3 bg-white/70 backdrop-blur-sm px-4 py-2.5 rounded-2xl border border-[#F8C8DC] shadow-sm mb-6 w-full max-w-md">
         <CuteTeddy mood="dance" size={54} />
         <div className="text-left text-xs sm:text-sm text-[#59404D]">
           <span className="font-bold text-[#8B264A] block">
@@ -156,21 +162,34 @@ export const Scene3BirthdayCascade: React.FC<SceneProps> = ({ onNext }) => {
         })}
       </div>
 
-      {/* Next Scene Button */}
-      <div className="w-full flex justify-center pb-6">
-        <motion.button
-          whileHover={{ scale: 1.04 }}
-          whileTap={{ scale: 0.96 }}
-          onClick={() => {
-            soundEffects.playPop();
-            onNext();
-          }}
-          className="px-7 py-3.5 rounded-full bg-gradient-to-r from-[#F4AFC4] via-[#EFA5B9] to-[#C65B82] text-white font-bold text-sm sm:text-base shadow-romantic flex items-center gap-2 cursor-pointer"
+      {/* Next Scene Button - SHOWN ONLY WHEN SHE HAS EXPLORED THE CONTENT */}
+      {canProceed ? (
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full flex flex-col items-center pb-6"
         >
-          <span>Next: Our Memory Scrapbook</span>
-          <ChevronRight className="w-4 h-4" />
-        </motion.button>
-      </div>
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            onClick={() => {
+              soundEffects.playPop();
+              onNext();
+            }}
+            className="px-7 py-3.5 rounded-full bg-gradient-to-r from-[#F4AFC4] via-[#EFA5B9] to-[#C65B82] text-white font-bold text-sm sm:text-base shadow-romantic flex items-center gap-2 cursor-pointer"
+          >
+            <span>Some moments that belong only to us... 📸🌸</span>
+            <ChevronRight className="w-4 h-4" />
+          </motion.button>
+          <span className="text-[11px] text-[#8C6C7E] mt-1.5 italic">
+            Tap to turn the page
+          </span>
+        </motion.div>
+      ) : (
+        <div className="pb-6 text-center text-xs text-[#8C6C7E] italic">
+          Blow out the candles & discover the wishes above to proceed ✨
+        </div>
+      )}
     </div>
   );
 };

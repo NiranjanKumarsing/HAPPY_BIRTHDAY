@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Gift } from 'lucide-react';
+import { Heart, ChevronRight } from 'lucide-react';
 import { LITTLE_THINGS, LittleThing } from '../data/littleThings';
 import { CuteTeddy, TeddyMood } from '../components/Decorations/CuteTeddy';
 import { soundEffects } from '../utils/soundEffects';
@@ -12,9 +12,12 @@ interface SceneProps {
 export const Scene7LittleThings: React.FC<SceneProps> = ({ onNext }) => {
   const [activeThing, setActiveThing] = useState<LittleThing | null>(null);
   const [teddyMood, setTeddyMood] = useState<TeddyMood>('idle');
+  const [openedCards, setOpenedCards] = useState<Record<string, boolean>>({});
 
   const handleSelectThing = (thing: LittleThing) => {
     soundEffects.playPop();
+    setOpenedCards((prev) => ({ ...prev, [thing.id]: true }));
+
     if (activeThing?.id === thing.id) {
       setActiveThing(null);
       setTeddyMood('idle');
@@ -23,6 +26,8 @@ export const Scene7LittleThings: React.FC<SceneProps> = ({ onNext }) => {
       setTeddyMood(thing.bearReaction);
     }
   };
+
+  const hasExplored = Object.keys(openedCards).length >= 3 || !!openedCards['thing-9'];
 
   return (
     <div className="relative min-h-[82vh] max-w-xl mx-auto py-6 px-4 flex flex-col items-center">
@@ -96,21 +101,34 @@ export const Scene7LittleThings: React.FC<SceneProps> = ({ onNext }) => {
         })}
       </div>
 
-      {/* Next Scene Button */}
-      <div className="w-full flex justify-center pb-6">
-        <motion.button
-          whileHover={{ scale: 1.04 }}
-          whileTap={{ scale: 0.96 }}
-          onClick={() => {
-            soundEffects.playPop();
-            onNext();
-          }}
-          className="px-7 py-3.5 rounded-full bg-gradient-to-r from-[#F4AFC4] via-[#EFA5B9] to-[#C65B82] text-white font-bold text-sm sm:text-base shadow-romantic flex items-center gap-2 cursor-pointer"
+      {/* Next Scene Button - SHOWN WHEN SHE HAS EXPLORED THE CARDS */}
+      {hasExplored ? (
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full flex flex-col items-center pb-6"
         >
-          <span>Next: The Birthday Gift</span>
-          <Gift className="w-4 h-4" />
-        </motion.button>
-      </div>
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            onClick={() => {
+              soundEffects.playPop();
+              onNext();
+            }}
+            className="px-7 py-3.5 rounded-full bg-gradient-to-r from-[#F4AFC4] via-[#EFA5B9] to-[#C65B82] text-white font-bold text-sm sm:text-base shadow-romantic flex items-center gap-2 cursor-pointer"
+          >
+            <span>There is still a little surprise wrapped for you... 🎀✨</span>
+            <ChevronRight className="w-4 h-4" />
+          </motion.button>
+          <span className="text-[11px] text-[#8C6C7E] mt-1.5 italic">
+            Tap to see your gift
+          </span>
+        </motion.div>
+      ) : (
+        <div className="pb-6 text-center text-xs text-[#8C6C7E] italic">
+          Tap and read a few of the cards above to unlock what's next ✨
+        </div>
+      )}
     </div>
   );
 };
