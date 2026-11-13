@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Volume2, VolumeX, Heart, Sparkles } from 'lucide-react';
 import { soundEffects } from '../../utils/soundEffects';
 
 export const NavBar: React.FC = () => {
-  const [isAudioOn, setIsAudioOn] = useState(false);
+  const [isAudioOn, setIsAudioOn] = useState(true);
+
+  useEffect(() => {
+    // Default music ON when site is opened
+    soundEffects.init();
+    soundEffects.setMuted(false);
+  }, []);
 
   const toggleAudio = () => {
     const nextState = !isAudioOn;

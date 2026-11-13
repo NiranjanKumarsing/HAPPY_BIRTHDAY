@@ -8,9 +8,33 @@ interface NoteEvent {
 
 class SoundEngine {
   private ctx: AudioContext | null = null;
-  private isMuted: boolean = true; // default silent as per requirements
+  private isMuted: boolean = false; // default ON when site is opened
   private melodyTimeout: number | null = null;
   private currentNoteIndex: number = 0;
+
+  constructor() {
+    if (typeof window !== 'undefined') {
+      const unlockAudio = () => {
+        if (!this.ctx) {
+          this.getContext();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume().then(() => {
+            if (!this.isMuted && !this.melodyTimeout) {
+              this.playNextHappyBirthdayNote();
+            }
+          }).catch(() => {});
+        } else if (!this.isMuted && !this.melodyTimeout) {
+          this.playNextHappyBirthdayNote();
+        }
+      };
+
+      window.addEventListener('click', unlockAudio, { passive: true });
+      window.addEventListener('touchstart', unlockAudio, { passive: true });
+      window.addEventListener('pointerdown', unlockAudio, { passive: true });
+      window.addEventListener('keydown', unlockAudio, { passive: true });
+    }
+  }
 
   // Exact Happy Birthday instrumental melody notes (in Hz)
   private happyBirthdayNotes: NoteEvent[] = [
@@ -64,6 +88,9 @@ class SoundEngine {
 
   public init() {
     this.getContext();
+    if (!this.isMuted && !this.melodyTimeout) {
+      this.playNextHappyBirthdayNote();
+    }
   }
 
   public setMuted(muted: boolean) {
@@ -71,6 +98,7 @@ class SoundEngine {
     if (muted) {
       this.stopHappyBirthdayMelody();
     } else {
+      this.stopHappyBirthdayMelody();
       this.currentNoteIndex = 0;
       this.playNextHappyBirthdayNote();
     }
