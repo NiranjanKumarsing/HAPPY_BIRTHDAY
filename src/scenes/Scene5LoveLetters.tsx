@@ -28,7 +28,7 @@ export const Scene5LoveLetters: React.FC<SceneProps> = ({ onNext }) => {
   };
 
   return (
-    <div className="relative min-h-[82vh] max-w-lg mx-auto py-6 px-4 flex flex-col items-center">
+    <div className="relative min-h-[82vh] max-w-lg mx-auto py-6 px-4 flex flex-col items-center w-full overflow-x-hidden">
       {/* Header */}
       <div className="text-center mb-6">
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#F8C8DC] text-[#8B264A] mb-2 border border-[#EFA5B9]">
@@ -65,9 +65,9 @@ export const Scene5LoveLetters: React.FC<SceneProps> = ({ onNext }) => {
       </div>
 
       {/* The Romantic Stationery Letter Card */}
-      <div className="relative w-full">
+      <div className="relative w-full pt-5">
         {/* Decorative clip or bow on top */}
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 flex items-center justify-center">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20 flex items-center justify-center">
           <div className="w-8 h-8 rounded-full bg-[#FFF0B3] border-2 border-[#F3BE58] shadow-sm flex items-center justify-center text-sm">
             🎀
           </div>
@@ -80,7 +80,7 @@ export const Scene5LoveLetters: React.FC<SceneProps> = ({ onNext }) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -15, scale: 0.96 }}
             transition={{ duration: 0.4 }}
-            className="w-full bg-[#FFFDF8] rounded-3xl p-6 sm:p-8 shadow-2xl border border-[#F8C8DC] vintage-letter-paper"
+            className="w-full bg-[#FFFDF8] rounded-3xl p-5 sm:p-8 shadow-2xl border border-[#F8C8DC] vintage-letter-paper"
           >
             {/* Letter Stamp Header */}
             <div className="flex items-center justify-between border-b border-[#F8C8DC] pb-4 mb-4">
@@ -98,7 +98,7 @@ export const Scene5LoveLetters: React.FC<SceneProps> = ({ onNext }) => {
             </div>
 
             {/* Letter Lines */}
-            <div className="font-handwriting text-2xl sm:text-3xl leading-relaxed text-[#59404D] space-y-4">
+            <div className="font-handwriting text-xl sm:text-2xl leading-relaxed text-[#59404D] space-y-4">
               {currentLetter.content.map((paragraph, i) => (
                 <p key={i} className="first-letter:text-3xl first-letter:font-bold first-letter:text-[#8B264A]">
                   {paragraph}
@@ -108,10 +108,10 @@ export const Scene5LoveLetters: React.FC<SceneProps> = ({ onNext }) => {
 
             {/* Letter Footer */}
             <div className="mt-8 pt-4 border-t border-[#F8C8DC] flex items-center justify-between">
-              <span className="text-xs font-handwriting text-xl text-[#8C6C7E]">
+              <span className="text-xs font-handwriting text-base text-[#8C6C7E]">
                 Sirf aapke liye, Jann ✨
               </span>
-              <span className="font-handwriting font-bold text-2xl text-[#8B264A]">
+              <span className="font-handwriting font-bold text-xl text-[#8B264A]">
                 — Niranjan ❤️
               </span>
             </div>

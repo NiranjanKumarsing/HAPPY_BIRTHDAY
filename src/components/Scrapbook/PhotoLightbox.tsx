@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Camera, Sparkles } from 'lucide-react';
 import { PhotoMemory } from '../../data/photos';
@@ -17,20 +18,7 @@ export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
   onClose,
   onNavigate,
 }) => {
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!photo) return;
-      if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowRight') handleNext();
-      if (e.key === 'ArrowLeft') handlePrev();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  });
-
-  if (!photo) return null;
-
-  const currentIndex = photos.findIndex((p) => p.id === photo.id);
+  const currentIndex = photo ? photos.findIndex((p) => p.id === photo.id) : -1;
 
   const handleNext = () => {
     soundEffects.playPop();
@@ -44,102 +32,184 @@ export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
     onNavigate(photos[prevIdx]);
   };
 
-  return (
+  // Keyboard navigation
+  useEffect(() => {
+    if (!photo) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowRight') handleNext();
+      if (e.key === 'ArrowLeft') handlePrev();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [photo, currentIndex]);
+
+  // Lock body scroll while open — prevents background from scrolling on mobile
+  useEffect(() => {
+    if (photo) {
+      const prevOverflow = document.body.style.overflow;
+      const prevPosition = document.body.style.position;
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      return () => {
+        document.body.style.overflow = prevOverflow;
+        document.body.style.position = prevPosition;
+        document.body.style.width = '';
+      };
+    }
+  }, [photo]);
+
+  // Render into document.body via portal — bypasses ALL parent overflow/transform constraints
+  // This guarantees true viewport-center positioning regardless of scroll position
+  return createPortal(
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-md" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}>
-        {/* Backdrop click to close */}
-        <div className="absolute inset-0" onClick={onClose} />
-
-        {/* Modal Window */}
+      {photo && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="relative z-10 w-full max-w-[calc(100vw-24px)] sm:max-w-lg max-h-[90vh] overflow-y-auto bg-[#FFFDF9] rounded-3xl p-4 sm:p-7 shadow-2xl border-4 border-white vintage-letter-paper"
-          onClick={(e) => e.stopPropagation()}
+          key="lightbox-backdrop"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '12px',
+            backgroundColor: 'rgba(0,0,0,0.65)',
+          }}
         >
-          {/* Close Button */}
-          <button
-            onClick={() => {
-              soundEffects.playPop();
-              onClose();
+          {/* Backdrop — tap outside to close */}
+          <div
+            style={{ position: 'absolute', inset: 0 }}
+            onClick={onClose}
+          />
+
+          {/* Modal Card */}
+          <motion.div
+            key={photo.id}
+            initial={{ opacity: 0, scale: 0.88, y: 24 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.88, y: 24 }}
+            transition={{ type: 'spring', damping: 26, stiffness: 320 }}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: 'relative',
+              zIndex: 1,
+              width: '100%',
+              maxWidth: '440px',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              backgroundColor: '#FFFDF9',
+              borderRadius: '24px',
+              padding: '16px',
+              boxShadow: '0 25px 60px rgba(0,0,0,0.3)',
+              border: '4px solid #fff',
             }}
-            className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-[#FFF0B3] border border-[#F4AFC4] text-[#8B264A] flex items-center justify-center shadow-md hover:bg-white transition-all cursor-pointer"
-            aria-label="Close"
           >
-            <X className="w-5 h-5" />
-          </button>
+            {/* Close Button */}
+            <button
+              onClick={() => { soundEffects.playPop(); onClose(); }}
+              style={{
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                zIndex: 20,
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                background: '#FFF0B3',
+                border: '1px solid #F4AFC4',
+                color: '#8B264A',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+              }}
+              aria-label="Close"
+            >
+              <X style={{ width: '18px', height: '18px' }} />
+            </button>
 
-          {/* Photo Preview Frame */}
-          <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-tr from-[#F8C8DC] via-[#FFF7F0] to-[#DCCBFA] border-2 border-[#F4AFC4]/50 shadow-inner flex items-center justify-center">
-            {photo.image ? (
-              <img
-                src={photo.image}
-                alt={photo.title}
-                className="w-full h-full object-contain sm:object-cover bg-black/10"
-              />
-            ) : (
-              /* Aesthetic Illustrated Placeholder if no image set */
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-                <div className="w-16 h-16 rounded-full bg-white/80 shadow-md flex items-center justify-center text-[#E24C68] mb-3 border border-[#F8C8DC]">
-                  <Camera className="w-8 h-8 text-[#C65B82]" />
+            {/* Photo Frame */}
+            <div style={{
+              position: 'relative',
+              width: '100%',
+              aspectRatio: '4/3',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              background: 'linear-gradient(135deg, #F8C8DC, #FFF7F0, #DCCBFA)',
+              border: '2px solid rgba(244,175,196,0.5)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              {photo.image ? (
+                <img
+                  src={photo.image}
+                  alt={photo.title}
+                  style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                />
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', textAlign: 'center' }}>
+                  <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'rgba(255,255,255,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', border: '1px solid #F8C8DC' }}>
+                    <Camera style={{ width: '28px', height: '28px', color: '#C65B82' }} />
+                  </div>
+                  <span style={{ fontSize: '10px', fontWeight: 'bold', color: '#C65B82', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>{photo.category}</span>
+                  <p style={{ fontFamily: 'serif', fontSize: '15px', fontWeight: 'bold', color: '#8B264A' }}>{photo.title}</p>
                 </div>
-                <span className="text-xs uppercase tracking-widest font-bold text-[#C65B82] mb-1">
-                  {photo.category}
-                </span>
-                <p className="font-serif text-lg sm:text-xl font-bold text-[#8B264A]">
-                  {photo.title}
-                </p>
-                <p className="text-xs text-[#8C6C7E] mt-1 max-w-xs italic">
-                  Photo ready to be customized in <code className="bg-[#FFF0B3] px-1 py-0.5 rounded font-mono text-[10px]">src/data/photos.ts</code>
-                </p>
+              )}
+              {/* Sticker */}
+              <div style={{ position: 'absolute', top: '10px', left: '10px', fontSize: '22px', userSelect: 'none' }}>
+                {photo.sticker || '🌸'}
               </div>
-            )}
-
-            {/* Sticker corner */}
-            <div className="absolute top-3 left-3 text-2xl drop-shadow-sm select-none">
-              {photo.sticker || '🌸'}
-            </div>
-          </div>
-
-          {/* Details below photo */}
-          <div className="mt-4 text-center">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#F8C8DC]/60 text-[#8B264A] mb-2">
-              <Sparkles className="w-3 h-3 text-[#E24C68]" />
-              <span>{photo.category}</span>
-              {photo.date && <span>• {photo.date}</span>}
             </div>
 
-            <p className="font-handwriting text-2xl sm:text-3xl text-[#59404D] leading-snug px-2">
-              "{photo.caption}"
-            </p>
-          </div>
+            {/* Caption */}
+            <div style={{ marginTop: '14px', textAlign: 'center' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '999px', background: 'rgba(248,200,220,0.6)', color: '#8B264A', fontSize: '11px', fontWeight: '600', marginBottom: '8px' }}>
+                <Sparkles style={{ width: '11px', height: '11px', color: '#E24C68' }} />
+                <span>{photo.category}</span>
+                {photo.date && <span>• {photo.date}</span>}
+              </div>
+              <p style={{ fontFamily: 'Caveat, Dancing Script, cursive', fontSize: '22px', color: '#59404D', lineHeight: '1.4', padding: '0 8px' }}>
+                "{photo.caption}"
+              </p>
+            </div>
 
-          {/* Navigation Controls */}
-          <div className="flex items-center justify-between mt-5 pt-3 border-t border-[#F8C8DC]">
-            <button
-              onClick={handlePrev}
-              className="px-4 py-2 rounded-full bg-[#FFF7F0] border border-[#F8C8DC] text-[#8B264A] text-xs sm:text-sm font-semibold flex items-center gap-1.5 hover:bg-[#F8C8DC] transition-colors cursor-pointer"
-            >
-              <ChevronLeft className="w-4 h-4" />
-              <span>Previous</span>
-            </button>
+            {/* Navigation */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '16px', paddingTop: '12px', borderTop: '1px solid #F8C8DC' }}>
+              <button
+                onClick={handlePrev}
+                style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px', borderRadius: '999px', background: '#FFF7F0', border: '1px solid #F8C8DC', color: '#8B264A', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+              >
+                <ChevronLeft style={{ width: '15px', height: '15px' }} />
+                <span>Prev</span>
+              </button>
 
-            <span className="text-xs text-[#8C6C7E] font-medium">
-              {currentIndex + 1} of {photos.length}
-            </span>
+              <span style={{ fontSize: '11px', color: '#8C6C7E', fontWeight: '500' }}>
+                {currentIndex + 1} of {photos.length}
+              </span>
 
-            <button
-              onClick={handleNext}
-              className="px-4 py-2 rounded-full bg-[#FFF7F0] border border-[#F8C8DC] text-[#8B264A] text-xs sm:text-sm font-semibold flex items-center gap-1.5 hover:bg-[#F8C8DC] transition-colors cursor-pointer"
-            >
-              <span>Next</span>
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
+              <button
+                onClick={handleNext}
+                style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px', borderRadius: '999px', background: '#FFF7F0', border: '1px solid #F8C8DC', color: '#8B264A', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+              >
+                <span>Next</span>
+                <ChevronRight style={{ width: '15px', height: '15px' }} />
+              </button>
+            </div>
+          </motion.div>
         </motion.div>
-      </div>
-    </AnimatePresence>
+      )}
+    </AnimatePresence>,
+    document.body
   );
 };
