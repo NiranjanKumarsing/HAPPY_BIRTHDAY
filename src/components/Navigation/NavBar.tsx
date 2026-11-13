@@ -7,8 +7,7 @@ export const NavBar: React.FC = () => {
 
   useEffect(() => {
     // Default music ON when site is opened
-    soundEffects.init();
-    soundEffects.setMuted(false);
+    soundEffects.startMusic();
   }, []);
 
   const toggleAudio = () => {

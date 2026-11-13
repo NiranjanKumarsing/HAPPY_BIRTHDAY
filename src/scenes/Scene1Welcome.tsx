@@ -10,7 +10,7 @@ interface SceneProps {
 
 export const Scene1Welcome: React.FC<SceneProps> = ({ onNext }) => {
   const handleStart = () => {
-    soundEffects.init();
+    soundEffects.startMusic();
     soundEffects.playPop();
     onNext();
   };

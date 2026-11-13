@@ -15,24 +15,26 @@ class SoundEngine {
   constructor() {
     if (typeof window !== 'undefined') {
       const unlockAudio = () => {
-        if (!this.ctx) {
-          this.getContext();
-        }
-        if (this.ctx && this.ctx.state === 'suspended') {
-          this.ctx.resume().then(() => {
+        const ctx = this.getContext();
+        if (!ctx) return;
+
+        if (ctx.state === 'suspended') {
+          ctx.resume().then(() => {
             if (!this.isMuted && !this.melodyTimeout) {
+              this.currentNoteIndex = 0;
               this.playNextHappyBirthdayNote();
             }
           }).catch(() => {});
         } else if (!this.isMuted && !this.melodyTimeout) {
+          this.currentNoteIndex = 0;
           this.playNextHappyBirthdayNote();
         }
       };
 
-      window.addEventListener('click', unlockAudio, { passive: true });
-      window.addEventListener('touchstart', unlockAudio, { passive: true });
-      window.addEventListener('pointerdown', unlockAudio, { passive: true });
-      window.addEventListener('keydown', unlockAudio, { passive: true });
+      ['click', 'touchstart', 'touchend', 'pointerdown', 'mousedown', 'keydown'].forEach((evt) => {
+        window.addEventListener(evt, unlockAudio, { capture: true, passive: true });
+        document.addEventListener(evt, unlockAudio, { capture: true, passive: true });
+      });
     }
   }
 
@@ -78,18 +80,43 @@ class SoundEngine {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (AudioCtx) {
         this.ctx = new AudioCtx();
+        this.ctx.onstatechange = () => {
+          if (this.ctx?.state === 'running' && !this.isMuted && !this.melodyTimeout) {
+            this.playNextHappyBirthdayNote();
+          }
+        };
       }
     }
     if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume();
+      this.ctx.resume().catch(() => {});
     }
     return this.ctx;
   }
 
   public init() {
-    this.getContext();
-    if (!this.isMuted && !this.melodyTimeout) {
+    const ctx = this.getContext();
+    if (!ctx) return;
+    if (ctx.state === 'running' && !this.isMuted && !this.melodyTimeout) {
       this.playNextHappyBirthdayNote();
+    }
+  }
+
+  public startMusic() {
+    this.isMuted = false;
+    const ctx = this.getContext();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') {
+      ctx.resume().then(() => {
+        if (!this.melodyTimeout) {
+          this.currentNoteIndex = 0;
+          this.playNextHappyBirthdayNote();
+        }
+      }).catch(() => {});
+    } else {
+      if (!this.melodyTimeout) {
+        this.currentNoteIndex = 0;
+        this.playNextHappyBirthdayNote();
+      }
     }
   }
 
@@ -255,9 +282,22 @@ class SoundEngine {
 
   // Plays Happy Birthday Instrumental Note by Note
   private playNextHappyBirthdayNote() {
-    if (this.isMuted) return;
+    if (this.isMuted) {
+      this.stopHappyBirthdayMelody();
+      return;
+    }
     const ctx = this.getContext();
     if (!ctx) return;
+
+    // Do NOT run timer or advance notes if browser has suspended the AudioContext
+    if (ctx.state === 'suspended') {
+      ctx.resume().then(() => {
+        if (ctx.state === 'running' && !this.isMuted && !this.melodyTimeout) {
+          this.playNextHappyBirthdayNote();
+        }
+      }).catch(() => {});
+      return;
+    }
 
     const note = this.happyBirthdayNotes[this.currentNoteIndex];
     const now = ctx.currentTime;
@@ -276,11 +316,11 @@ class SoundEngine {
       oscHarmonic.type = 'sine';
       oscHarmonic.frequency.setValueAtTime(note.freq * 2, now);
 
-      // Volume envelope
-      gain.gain.setValueAtTime(0.045, now);
+      // Volume envelope (audible and melodious)
+      gain.gain.setValueAtTime(0.16, now);
       gain.gain.exponentialRampToValueAtTime(0.0001, now + durationSeconds);
 
-      gainHarmonic.gain.setValueAtTime(0.015, now);
+      gainHarmonic.gain.setValueAtTime(0.04, now);
       gainHarmonic.gain.exponentialRampToValueAtTime(0.0001, now + durationSeconds * 0.8);
 
       osc.connect(gain);
@@ -300,6 +340,7 @@ class SoundEngine {
 
     // Schedule next note
     this.currentNoteIndex = (this.currentNoteIndex + 1) % this.happyBirthdayNotes.length;
+    this.stopHappyBirthdayMelody();
     this.melodyTimeout = window.setTimeout(() => {
       this.playNextHappyBirthdayNote();
     }, note.duration + note.gap);
