@@ -36,7 +36,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-gradient-to-b from-[#FFF7F0] via-[#F8C8DC] to-[#F4AFC4] text-[#59404D] overflow-x-hidden flex flex-col justify-between">
+    <div className="relative min-h-screen w-full max-w-[100vw] bg-gradient-to-b from-[#FFF7F0] via-[#F8C8DC] to-[#F4AFC4] text-[#59404D] overflow-x-hidden flex flex-col justify-between">
       {/* Background Animated Atmosphere */}
       <FloatingHearts count={currentScene === 10 ? 10 : 18} />
       <TwinklingStars count={currentScene >= 6 && currentScene <= 9 ? 30 : 16} />

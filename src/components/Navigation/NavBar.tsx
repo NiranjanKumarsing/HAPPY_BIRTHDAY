@@ -16,7 +16,7 @@ export const NavBar: React.FC = () => {
 
   return (
     <header className="fixed top-3 inset-x-0 z-40 flex justify-center px-4 pointer-events-none">
-      <div className="pointer-events-auto max-w-md w-full flex items-center justify-between px-4 py-2 rounded-full glass-romantic shadow-romantic border border-white/80">
+      <div className="pointer-events-auto max-w-md w-full flex items-center justify-between px-4 py-2 rounded-full bg-[#FFFDF9] shadow-romantic border border-[#F8E4ED]">
         {/* Left: Romantic Title with Heart */}
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-full bg-[#F8C8DC] flex items-center justify-center text-xs shadow-inner">

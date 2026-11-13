@@ -10,7 +10,7 @@ interface SceneProps {
 
 export const Scene4Scrapbook: React.FC<SceneProps> = ({ onNext }) => {
   return (
-    <div className="relative min-h-[82vh] max-w-4xl mx-auto py-4 px-3 flex flex-col items-center">
+    <div className="relative min-h-[82vh] max-w-4xl mx-auto py-4 px-3 flex flex-col items-center overflow-x-hidden">
       <ScrapbookGallery />
 
       <div className="w-full flex flex-col items-center py-8">

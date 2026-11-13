@@ -87,7 +87,7 @@ export const Scene3BirthdayCascade: React.FC<SceneProps> = ({ onNext }) => {
       </div>
 
       {/* Cute dancing teddy bear cheering */}
-      <div className="flex items-center gap-3 bg-white/70 backdrop-blur-sm px-4 py-2.5 rounded-2xl border border-[#F8C8DC] shadow-sm mb-6 w-full max-w-md">
+      <div className="flex items-center gap-3 bg-[#FFFDF9] px-4 py-2.5 rounded-2xl border border-[#F8C8DC] shadow-sm mb-6 w-full max-w-md">
         <CuteTeddy mood="dance" size={54} />
         <div className="text-left text-xs sm:text-sm text-[#59404D]">
           <span className="font-bold text-[#8B264A] block">
@@ -119,7 +119,7 @@ export const Scene3BirthdayCascade: React.FC<SceneProps> = ({ onNext }) => {
                 className={`p-4 sm:p-5 rounded-2xl transition-all border ${
                   isRevealed
                     ? 'bg-[#FFFDF8] border-[#EFA5B9] shadow-romantic'
-                    : 'bg-white/80 border-[#F8C8DC] shadow-sm hover:border-[#EFA5B9]'
+                    : 'bg-[#FFFDF9] border-[#F8C8DC] shadow-sm hover:border-[#EFA5B9]'
                 }`}
               >
                 <div className="flex items-start gap-3">

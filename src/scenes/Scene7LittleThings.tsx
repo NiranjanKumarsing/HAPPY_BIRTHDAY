@@ -74,7 +74,7 @@ export const Scene7LittleThings: React.FC<SceneProps> = ({ onNext }) => {
               className={`p-4 rounded-2xl cursor-pointer transition-all border ${
                 isSelected
                   ? 'bg-gradient-to-br from-[#FFFDF8] to-[#FFF0B3]/50 border-[#EFA5B9] shadow-romantic ring-2 ring-[#F4AFC4]/50'
-                  : 'bg-white/80 border-[#F8C8DC] shadow-sm hover:border-[#EFA5B9]'
+                  : 'bg-[#FFFDF9] border-[#F8C8DC] shadow-sm hover:border-[#EFA5B9]'
               }`}
             >
               <div className="flex items-start gap-3">

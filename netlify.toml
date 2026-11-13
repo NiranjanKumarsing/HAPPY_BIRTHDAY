@@ -7,9 +7,30 @@
   to = "/index.html"
   status = 200
 
+# Explicit MIME types — prevents application/octet-stream white screen
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Content-Type = "text/javascript; charset=utf-8"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.mjs"
+  [headers.values]
+    Content-Type = "text/javascript; charset=utf-8"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Content-Type = "text/css; charset=utf-8"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Security + no-dark-mode meta
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
+

@@ -195,7 +195,7 @@ export const Scene10Apology: React.FC<SceneProps> = ({ onRestart }) => {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 + idx * 0.15, duration: 0.5 }}
-                  className="bg-white/95 backdrop-blur-sm p-4 sm:p-5 rounded-2xl shadow-paper border border-[#F8C8DC] flex items-start gap-3.5"
+                  className="bg-[#FFFDF9] backdrop-blur-sm p-4 sm:p-5 rounded-2xl shadow-paper border border-[#F8C8DC] flex items-start gap-3.5"
                 >
                   <span className="text-2xl select-none">{item.icon}</span>
                   <div className="flex-1">
@@ -248,7 +248,7 @@ export const Scene10Apology: React.FC<SceneProps> = ({ onRestart }) => {
 
             {/* INTERACTIVE CHOICE: ASK HER IF SHE WANTS TO RELIVE THE EXPERIENCE */}
             <div className="pt-6 pb-12 flex flex-col items-center">
-              <div className="w-full max-w-md bg-white/90 backdrop-blur-sm p-6 rounded-3xl border border-[#F8C8DC] shadow-romantic text-center space-y-3">
+              <div className="w-full max-w-md bg-[#FFFDF9] p-6 rounded-3xl border border-[#F8C8DC] shadow-romantic text-center space-y-3">
                 <div className="w-10 h-10 rounded-full bg-[#FFF0B3] border border-[#F3BE58] flex items-center justify-center text-lg mx-auto shadow-sm">
                   ✨
                 </div>

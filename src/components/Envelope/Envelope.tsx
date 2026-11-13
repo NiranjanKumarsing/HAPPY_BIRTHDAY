@@ -73,7 +73,7 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onContinue }) => {
         {/* ENVELOPE BASE (Always visible or smoothly sliding down when letter expands) */}
         <AnimatePresence>
           {!isUnfoldingOrDone && (
-            <div className="relative w-full max-w-[340px] h-[230px] flex items-center justify-center my-6">
+            <div className="relative w-full max-w-[300px] sm:max-w-[340px] h-[200px] sm:h-[230px] flex items-center justify-center my-4 sm:my-6">
               {/* Glow */}
               <div className="absolute inset-2 bg-gradient-to-tr from-[#F8C8DC] via-[#DCCBFA] to-[#FFF0B3] rounded-3xl blur-2xl opacity-60 pointer-events-none" />
 

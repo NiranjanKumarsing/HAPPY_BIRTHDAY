@@ -23,7 +23,7 @@ export const Scene1Welcome: React.FC<SceneProps> = ({ onNext }) => {
         transition={{ duration: 0.8 }}
         className="mb-4"
       >
-        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-[#F8C8DC] text-[#C65B82] text-xs sm:text-sm font-semibold shadow-romantic">
+        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFFDF9] border border-[#F8C8DC] text-[#C65B82] text-xs sm:text-sm font-semibold shadow-romantic">
           <Sparkles className="w-4 h-4 text-[#F3BE58] animate-spin" />
           A Special Birthday World
           <Sparkles className="w-4 h-4 text-[#F3BE58] animate-spin" />

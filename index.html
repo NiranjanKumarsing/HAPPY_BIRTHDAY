@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="theme-color" content="#F8C8DC" />
+    <meta name="color-scheme" content="light only" />
+    <style>
+      /* Prevent dark-mode overrides before React hydrates */
+      :root { color-scheme: light only; }
+      html, body { background-color: #FFF7F0 !important; color: #59404D !important; }
+    </style>
     <meta name="description" content="An interactive, animated romantic birthday experience made with endless love for Chhavi by Niranjan" />
     <title>A Little World Made for Chhavi ❤️ | Happy Birthday Jann</title>
     

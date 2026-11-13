@@ -69,7 +69,7 @@ export const GiftBox: React.FC<GiftBoxProps> = ({ onContinue }) => {
         {/* THE 3D GIFT BOX (Shows during wrapped & rising steps) */}
         <AnimatePresence>
           {!isUnfoldingOrDone && (
-            <div className="relative w-64 h-64 sm:w-72 sm:h-72 flex items-center justify-center my-4">
+            <div className="relative w-56 h-56 sm:w-72 sm:h-72 flex items-center justify-center my-4">
               {/* Glow */}
               <motion.div
                 animate={

@@ -108,7 +108,7 @@ export const Scene6Shayari: React.FC<SceneProps> = ({ onNext }) => {
           disabled={activeIdx === 0}
           className={`px-4 py-2 rounded-full border text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
             activeIdx === 0
-              ? 'opacity-40 cursor-not-allowed bg-transparent border-gray-300 text-gray-400'
+              ? 'opacity-40 cursor-not-allowed bg-[#F8F0F3] border-gray-300 text-gray-400'
               : 'bg-[#FFF7F0] border-[#F8C8DC] text-[#8B264A] hover:bg-white shadow-sm'
           }`}
         >

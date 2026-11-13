@@ -57,7 +57,7 @@ export const Scene9FinalRomantic: React.FC<SceneProps> = ({ onNext }) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.7 }}
-        className="w-full bg-[#FFFDF9]/95 backdrop-blur-md rounded-3xl p-7 sm:p-9 shadow-2xl border border-[#F8C8DC] space-y-5"
+        className="w-full bg-[#FFFDF9] rounded-3xl p-7 sm:p-9 shadow-2xl border border-[#F8C8DC] space-y-5"
       >
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#DCCBFA]/60 text-[#59404D] border border-[#DCCBFA]">
           <Sparkles className="w-3.5 h-3.5 text-[#C65B82]" />

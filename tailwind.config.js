@@ -4,6 +4,8 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  // Disable Tailwind dark mode so it never flips colors on dark-mode phones
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {

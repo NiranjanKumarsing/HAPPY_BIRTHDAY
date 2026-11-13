@@ -46,7 +46,7 @@ export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-md" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}>
         {/* Backdrop click to close */}
         <div className="absolute inset-0" onClick={onClose} />
 
@@ -56,7 +56,7 @@ export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="relative z-10 w-full max-w-lg bg-[#FFFDF9] rounded-3xl p-5 sm:p-7 shadow-2xl border-4 border-white vintage-letter-paper overflow-hidden"
+          className="relative z-10 w-full max-w-[calc(100vw-24px)] sm:max-w-lg max-h-[90vh] overflow-y-auto bg-[#FFFDF9] rounded-3xl p-4 sm:p-7 shadow-2xl border-4 border-white vintage-letter-paper"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Close Button */}
