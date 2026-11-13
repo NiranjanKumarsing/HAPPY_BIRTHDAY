@@ -174,20 +174,43 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onContinue }) => {
                 {/* Ribbon across */}
                 <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 h-3 bg-[#FFF0B3]/60 backdrop-blur-sm pointer-events-none z-20 border-y border-[#FFE28A]/40" />
 
-                {/* WAX SEAL (Centered) */}
+                {/* WAX SEAL (Centered Exactly on the Flap Tip) */}
                 <AnimatePresence>
                   {step === 'sealed' && (
                     <motion.div
-                      initial={{ scale: 1, opacity: 1 }}
-                      exit={{ scale: 1.4, opacity: 0, rotate: 30 }}
-                      transition={{ duration: 0.35 }}
-                      className="absolute left-1/2 top-[46%] -translate-x-1/2 -translate-y-1/2 z-30 cursor-pointer"
+                      initial={{ x: '-50%', y: '-50%', scale: 1, opacity: 1 }}
+                      animate={{ x: '-50%', y: '-50%', scale: [1, 1.04, 1] }}
+                      exit={{
+                        x: '-50%',
+                        y: '-50%',
+                        scale: 1.4,
+                        opacity: 0,
+                        rotate: 25,
+                        transition: { duration: 0.35 },
+                      }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 2.2,
+                        ease: 'easeInOut',
+                      }}
+                      style={{ left: '50%', top: '50%' }}
+                      className="absolute z-30 cursor-pointer"
                     >
-                      <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-[#E24C68] via-[#C23B55] to-[#8C1B33] flex items-center justify-center shadow-lg border-2 border-[#FFA3B5]/50 group">
-                        <Heart className="w-8 h-8 text-[#FFFDF8] fill-[#FFFDF8] drop-shadow-sm group-hover:scale-110 transition-transform" />
-                        <span className="absolute -bottom-1 right-0 text-[10px] font-bold text-white bg-[#8C1B33] px-1.5 py-0.5 rounded-full border border-white/40">
-                          C
-                        </span>
+                      {/* Realistic Handcrafted Wax Seal */}
+                      <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-[#D93D5B] via-[#B82643] to-[#7D152B] flex items-center justify-center shadow-[0_6px_20px_rgba(140,27,51,0.45)] border-2 border-[#FFA3B5]/40 group hover:scale-105 active:scale-95 transition-transform">
+                        {/* Outer Wax Irregular Rim */}
+                        <div className="absolute inset-1 rounded-full border border-[#FFCCD5]/30 pointer-events-none" />
+                        
+                        {/* Embossed Inner Circle */}
+                        <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#941C34] to-[#C4334F] flex items-center justify-center shadow-inner border border-[#E24C68]/50">
+                          {/* Centered Heart with C Monogram */}
+                          <div className="relative flex items-center justify-center">
+                            <Heart className="w-7 h-7 text-[#FFCCD5] fill-[#FFCCD5] opacity-90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]" />
+                            <span className="absolute text-xs font-serif font-black text-[#7D152B] tracking-tighter select-none pt-0.5">
+                              C
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </motion.div>
                   )}
