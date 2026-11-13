@@ -58,27 +58,24 @@ export const ScrapbookGallery: React.FC = () => {
                     src={photo.image}
                     alt={photo.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                    }}
                   />
-                ) : null}
-
-                {/* Aesthetic Illustrated Placeholder */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
-                  <div className="w-12 h-12 rounded-full bg-white/80 shadow-sm flex items-center justify-center text-[#E24C68] mb-2 border border-[#F8C8DC]">
-                    <Camera className="w-6 h-6 text-[#C65B82]" />
+                ) : (
+                  /* Aesthetic Illustrated Placeholder if no image */
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+                    <div className="w-12 h-12 rounded-full bg-white/80 shadow-sm flex items-center justify-center text-[#E24C68] mb-2 border border-[#F8C8DC]">
+                      <Camera className="w-6 h-6 text-[#C65B82]" />
+                    </div>
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-[#C65B82] mb-0.5">
+                      {photo.category}
+                    </span>
+                    <p className="font-serif text-sm font-bold text-[#8B264A] leading-tight line-clamp-2">
+                      {photo.title}
+                    </p>
+                    <span className="text-[9px] text-[#8C6C7E] mt-1 italic">
+                      Tap to view closer
+                    </span>
                   </div>
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-[#C65B82] mb-0.5">
-                    {photo.category}
-                  </span>
-                  <p className="font-serif text-sm font-bold text-[#8B264A] leading-tight line-clamp-2">
-                    {photo.title}
-                  </p>
-                  <span className="text-[9px] text-[#8C6C7E] mt-1 italic">
-                    Tap to view closer
-                  </span>
-                </div>
+                )}
 
                 {/* Sticker in corner */}
                 <span className="absolute bottom-2 right-2 text-xl drop-shadow-sm select-none">

@@ -77,29 +77,25 @@ export const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
               <img
                 src={photo.image}
                 alt={photo.title}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  // Fallback if image path is not found yet
-                  e.currentTarget.style.display = 'none';
-                }}
+                className="w-full h-full object-contain sm:object-cover bg-black/10"
               />
-            ) : null}
-
-            {/* Aesthetic Illustrated Placeholder if no image set */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-              <div className="w-16 h-16 rounded-full bg-white/80 shadow-md flex items-center justify-center text-[#E24C68] mb-3 border border-[#F8C8DC]">
-                <Camera className="w-8 h-8 text-[#C65B82]" />
+            ) : (
+              /* Aesthetic Illustrated Placeholder if no image set */
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+                <div className="w-16 h-16 rounded-full bg-white/80 shadow-md flex items-center justify-center text-[#E24C68] mb-3 border border-[#F8C8DC]">
+                  <Camera className="w-8 h-8 text-[#C65B82]" />
+                </div>
+                <span className="text-xs uppercase tracking-widest font-bold text-[#C65B82] mb-1">
+                  {photo.category}
+                </span>
+                <p className="font-serif text-lg sm:text-xl font-bold text-[#8B264A]">
+                  {photo.title}
+                </p>
+                <p className="text-xs text-[#8C6C7E] mt-1 max-w-xs italic">
+                  Photo ready to be customized in <code className="bg-[#FFF0B3] px-1 py-0.5 rounded font-mono text-[10px]">src/data/photos.ts</code>
+                </p>
               </div>
-              <span className="text-xs uppercase tracking-widest font-bold text-[#C65B82] mb-1">
-                {photo.category}
-              </span>
-              <p className="font-serif text-lg sm:text-xl font-bold text-[#8B264A]">
-                {photo.title}
-              </p>
-              <p className="text-xs text-[#8C6C7E] mt-1 max-w-xs italic">
-                Photo ready to be customized in <code className="bg-[#FFF0B3] px-1 py-0.5 rounded font-mono text-[10px]">src/data/photos.ts</code>
-              </p>
-            </div>
+            )}
 
             {/* Sticker corner */}
             <div className="absolute top-3 left-3 text-2xl drop-shadow-sm select-none">
